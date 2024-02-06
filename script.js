@@ -1,24 +1,31 @@
-const container = document.getElementById('grid-container');
-
-function createGrid(size) {
-    container.innerHTML = ''; // Clear the existing grid
-    for (let i = 0; i < size * size; i++) {
-        const square = document.createElement('div');
-        square.classList.add('square');
-        container.appendChild(square);
+function createGrid(gridSize) {
+    var grid = document.querySelector(".gridContainer");
+    grid.innerHTML = ''; 
+    var pixelSize = 960 / gridSize;
+    for (var i = 0; i < gridSize * gridSize; i++) {
+        var newDiv = document.createElement('div');
+        newDiv.classList.add('gridItem');
+        newDiv.style.width = pixelSize + 'px';
+        newDiv.style.height = pixelSize + 'px';
+        newDiv.addEventListener('mouseover', function() {
+            let colors = ["red", "blue", "pink", "purple", "yellow", "orange", "lightgreen", "lightblue", "lime", "magenta"];
+            let randomColor = colors[Math.floor(Math.random() * colors.length)];
+            this.style.backgroundColor = randomColor;
+        });
+        grid.appendChild(newDiv);
     }
 }
 
-function changeGridSize() {
-    const newSize = prompt('Enter the number of squares per side (up to 100):');
-    const size = parseInt(newSize, 10);
-
-    if (isNaN(size) || size <= 0 || size > 100) {
-        alert('Please enter a valid number between 1 and 100.');
+const restartButton = document.querySelector('#sizeChange');
+restartButton.addEventListener('click', function() {   
+    var userInput = prompt("Enter a new size: 2-100");
+    if (userInput !== null && userInput < 100 && userInput > 2) {
+        createGrid(userInput);
     } else {
-        createGrid(size);
-    }
-}
+        alert("Please enter a valid positive number for the size.");
+    }    
+});
 
-// Initial grid creation
-createGrid(16);
+document.addEventListener('DOMContentLoaded', function() {
+    createGrid(10);
+});
